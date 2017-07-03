@@ -9,8 +9,27 @@ import { ImageService } from '../../shared/image.service';
 export class ImageListComponent implements OnInit {
 
   images: any[];
+  imagesFound = false;
+
+  handleSuccess(data) {
+    this.imagesFound = true;
+    this.images = data.hits;
+    console.log(data.hits);
+  }
+
+  handleError(error) {
+    console.log(error);
+  }
 
   constructor(private _imageService: ImageService)  { }
+
+  searchImages(query: string) {
+    return this._imageService.getImage(query).subscribe(
+      data => this.handleSuccess(data),
+      error => this.handleError(error),
+      () => console.log('Request complete')
+    )
+  }
 
   ngOnInit() {
   }
